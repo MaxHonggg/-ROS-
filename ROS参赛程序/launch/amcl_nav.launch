@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+
+<launch>
+    <arg name="use_rviz" default="false" />
+
+    <!-- for amcl -->    
+    <arg name="init_x" value="0.0" />
+    <arg name="init_y" value="0.0" />
+    <arg name="init_a" value="0.00" />
+
+    <!-- Map server -->
+    <node name="map_server" pkg="map_server" type="map_server" args="$(find art_racecar)/map/mymap.yaml"/>
+
+   
+
+    <!-- ODOMETRY -->
+    <!--rf2o_Laser_Odometry-->
+    <include file="$(find art_racecar)/launch/includes/rf2o.launch.xml" />
+    <!-- Robot_Localization -->
+    <node pkg="robot_localization" type="ekf_localization_node" name="ekf_se" clear_params="true">
+        <rosparam command="load" file="$(find art_racecar)/launch/includes/ekf_params.yaml" />
+    </node>
+
+    <!-- Localization -->
+    <!-- AMCL -->
+    <include file="$(find art_racecar)/launch/includes/amcl.launch.xml">
+        <arg name="init_x" value="$(arg init_x)"/>
+        <arg name="init_y" value="$(arg init_y)"/>
+        <arg name="init_a" value="$(arg init_a)"/>
+    </include>
+
+    <!-- Navstack -->
+    <node pkg="move_base" type="move_base" respawn="true" name="move_base" output="screen" >
+        <rosparam file="$(find art_racecar)/launch/includes/costmap_common_params.yaml" command="load" ns="global_costmap" />
+        <rosparam file="$(find art_racecar)/launch/includes/costmap_common_params.yaml" command="load" ns="local_costmap" />
+        <rosparam file="$(find art_racecar)/launch/includes/local_costmap_params.yaml" command="load" />
+        <rosparam file="$(find art_racecar)/launch/includes/global_costmap_params.yaml" command="load" />
+        <rosparam file="$(find art_racecar)/launch/includes/teb_local_planner_params.yaml" command="load" />
+
+        <param name="base_global_planner" value="global_planner/GlobalPlanner" />
+        <param name="planner_frequency" value="10.0" />
+        <param name="planner_patience" value="2.0" />
+        <!--param name="use_dijkstra" value="false" /-->
+        
+        <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
+        <param name="controller_frequency" value="14.0" />
+        <param name="controller_patience" value="2.0" />
+
+        <param name="clearing_rotation_allowed" value="false" />
+    </node>
+
+    <!-- Rviz -->
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find art_racecar)/rviz/amcl.rviz" if="$(arg use_rviz)" />
+</launch>

@@ -1,0 +1,13 @@
+<launch>
+
+
+	<node pkg="art_racecar" type="Goal_Publisher" name="Goal_Publisher"  output="screen">
+		<rosparam command="load" file="$(find art_racecar)/launch/includes/goal_list.yaml" />
+	</node>
+ 	<node pkg="art_racecar" name="art_car_controller" type="art_car_controller" respawn="true" output="screen">
+		
+		<rosparam command="load" file="$(find art_racecar)/launch/includes/goal_pursuit_param.yaml" />
+
+	</node>
+
+</launch>

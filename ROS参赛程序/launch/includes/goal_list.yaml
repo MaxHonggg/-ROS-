@@ -1,0 +1,21 @@
+head_angle: -90
+head_region: 2 #head to region
+
+goal_number: 7
+
+
+
+goal_1: 1 #number : region
+goal_2: 10
+goal_3: 5
+goal_4: 7
+goal_5: 4
+
+
+goal_6: 11
+goal_7: 3
+goal_8: 5
+
+goal_9: 4
+goal_10: 9
+goal_11: 1
