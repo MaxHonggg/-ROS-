@@ -1,0 +1,17 @@
+<launch>
+
+
+
+ 	 <node pkg="racecar_gazebo" name="L1_controller_v2" type="L1_controller_v2" respawn="true" output="screen">
+		
+		<param name="kp" value="30.0" />
+		<param name="ki" value="0" />
+		<param name="kd" value="50" /> 
+		<param name="controller_freq" value="50"  /> 
+		<param name="view_filed" value="35.0" /> 
+	</node> 
+
+	<node pkg="racecar_gazebo" type="Goal_Publisher" name="Goal_Publisher" output="screen">
+		<rosparam command="load" file="$(find racecar_gazebo)/config/goal_list.yaml"/>
+	</node>
+</launch>

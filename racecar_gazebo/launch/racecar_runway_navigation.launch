@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- Launch the racecar -->
+  <include file="$(find racecar_gazebo)/launch/racecar.launch">
+         <arg name="world_name" value="race_final"/>
+      <!--<arg name="world_name" value="racecar_runway"/> -->
+
+  </include>
+  
+  <!-- Launch the built-map -->
+  <node name="map_server" pkg="map_server" type="map_server" args="$(find racecar_gazebo)/map/race_final.yaml" respawn="true"/>
+
+  <!--Launch the move base with time elastic band-->
+  <param name="/use_sim_time" value="true"/>
+  <node pkg="move_base" type="move_base" respawn="true" name="move_base" output="screen" >
+    <rosparam file="$(find racecar_gazebo)/config/costmap_common_params.yaml" command="load" ns="global_costmap" />
+    <rosparam file="$(find racecar_gazebo)/config/costmap_common_params.yaml" command="load" ns="local_costmap" />
+    <rosparam file="$(find racecar_gazebo)/config/local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find racecar_gazebo)/config/global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find racecar_gazebo)/config/teb_local_planner_params.yaml" command="load" />
+
+    <param name="base_global_planner" value="global_planner/GlobalPlanner" />
+    <param name="planner_frequency" value="40.0" />
+    <param name="planner_patience" value="2.0" />
+    <!--param name="use_dijkstra" value="false" /-->
+    
+    <param name="base_local_planner" value="teb_local_planner/TebLocalPlannerROS" />
+    <param name="controller_frequency" value="30.0" />
+    <param name="controller_patience" value="2.0" />
+
+    <param name="clearing_rotation_allowed" value="false" />
+  </node>
+  
+    <!-- AMCL -->
+    <!-- Localization -->
+
+    <!-- for amcl -->    
+    <!-- <arg name="init_x" default="-0.5" />
+    <arg name="init_y" default="0.0" />
+    <arg name="init_a" default="0.0" />
+    <include file="$(find racecar_gazebo)/config/racecar_amcl.launch.xml">
+        <arg name="init_x" value="$(arg init_x)"/>
+        <arg name="init_y" value="$(arg init_y)"/>
+        <arg name="init_a" value="$(arg init_a)"/>
+    </include>  -->
+
+
+     <!-- <include file="$(find rf2o_laser_odometry)/launch/rf2o_laser_odometry.launch">
+    </include>  -->
+  <!-- <node pkg="racecar_gazebo" name="gazebo_odometry_node" type="gazebo_odometry.py"/>  -->
+    <!--node name="base_link2laser_frame" pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 base_link laser_frame 100" /-->
+    <!--node name="base_link2laser" pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 base_link laser 100"/-->
+    <node name="map2odom" pkg="tf" type="static_transform_publisher" args="0 0 0 0 0 0 map odom 1"/>
+
+
+    
+  <!--node pkg="racecar_gazebo" name="path_pursui_node" type="path_pursuit.py"/-->
+
+    <!--node name="base2laser" pkg="tf" type="static_transform_publisher" args="0 0 0.080 0 0 0 base_link laser_link 100"/-->    
+</launch>

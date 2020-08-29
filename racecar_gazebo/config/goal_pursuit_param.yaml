@@ -1,0 +1,10 @@
+kp: 180.30
+ki: 0.00
+kd: 60.0 
+
+controller_freq: 50.0
+view_filed: 9999.0 
+speed_out: 50.0 
+baseSpeed: 1500
+baseAngle: 1500
+car_car2wayPt_x_thres: 0.1

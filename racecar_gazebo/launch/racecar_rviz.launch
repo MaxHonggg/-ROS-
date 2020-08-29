@@ -1,0 +1,8 @@
+<launch>
+    <!-- 启动rviz -->
+    <node pkg="rviz" type="rviz" name="rviz" args="-d $(find racecar_description)/rviz/racecar_urdf_nav.rviz"/>
+
+  <!--node pkg="racecar_gazebo" name="path_pursui_node" type="path_pursuit.py"/-->
+  <!--node pkg="racecar_gazebo" name="L1_controller_v2" type="L1_controller_v2"/-->
+</launch>
+
